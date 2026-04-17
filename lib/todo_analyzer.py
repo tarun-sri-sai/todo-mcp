@@ -2,7 +2,6 @@ import git
 import logging
 from datetime import datetime
 from sortedcontainers import SortedDict
-from .todo import parse_todo
 
 logging.getLogger()
 
@@ -11,7 +10,7 @@ class TodoAnalyzerError(Exception):
     pass
 
 
-class Analyzer:
+class TodoAnalyzer:
     def __init__(self, repo_path):
         self._DATE_FMT = "%Y-%m-%d"
 
