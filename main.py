@@ -1,7 +1,6 @@
 import logging
 from pathlib import Path
 from lib.logging_util import setup_logger
-from lib.todo import parse_todo, TodoParserError
 
 
 def init_logger():
