@@ -72,7 +72,7 @@ def _parse_blocks(blocks):
         block_data.append({
             "level": len(curr_indent) // 4,
             "updates": block_lines,
-            "id": sha256(block_lines[0].encode()).hexdigest()[:8],
+            "id": sha256(block_lines[0].encode()).hexdigest()[:7],
             "finished": _is_finished(block_lines)
         })
 
