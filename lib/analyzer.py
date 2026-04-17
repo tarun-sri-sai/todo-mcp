@@ -6,6 +6,7 @@ from .todo import parse_todo
 
 logging.getLogger()
 
+
 class TodoAnalyzerError(Exception):
     pass
 
