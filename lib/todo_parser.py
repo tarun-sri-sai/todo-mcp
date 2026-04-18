@@ -82,39 +82,31 @@ def _parse_blocks(blocks):
 def _validate_parents(block_data):
     curr_indents = [-1]
     curr_heading = ""
-    blocks_since_heading = 0
+    first_block = True
     for block in block_data:
         if "heading" in block:
-            blocks_since_heading = 0
+            first_block = True
             curr_indents = [-1]
             curr_heading = block["heading"]
             continue
 
-        if blocks_since_heading == 0:
-            if block.get("level") > 0:
-                raise TodoParserError(
-                    f"invalid first task for {curr_heading}"
-                )
+        if first_block and block["level"] > 0:
+            raise TodoParserError(
+                f"invalid first task for {curr_heading}"
+            )
 
-            curr_indents.append(0)
-            blocks_since_heading += 1
-            continue
-
-        while curr_indents and curr_indents[-1] > block["level"]:
+        while curr_indents and curr_indents[-1] >= block["level"]:
             curr_indents.pop()
 
         if (
-            block["level"] != curr_indents[-1] and
             block["level"] - 1 != curr_indents[-1]
         ):
             raise TodoParserError(
                 f"invalid parent task for \"{block['updates'][0]}\""
             )
 
-        if block["level"] == curr_indents[-1] + 1:
-            curr_indents.append(block["level"])
-
-        blocks_since_heading += 1
+        curr_indents.append(block["level"])
+        first_block = False
 
 
 def _validate_block_data(block_data):
@@ -128,10 +120,15 @@ def _validate_block_data(block_data):
 
 
 def parse_todo(text):
-    text = _normalize_newlines(text)
-    blocks = _split_blocks(text)
+    try:
+        text = _normalize_newlines(text)
+        blocks = _split_blocks(text)
 
-    block_data = _parse_blocks(blocks)
-    _validate_block_data(block_data)
+        block_data = _parse_blocks(blocks)
+        _validate_block_data(block_data)
 
-    return block_data
+        return block_data
+    except TodoParserError:
+        raise
+    except Exception as e:
+        raise TodoParserError("failed to parse todo") from e
