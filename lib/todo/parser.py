@@ -1,6 +1,6 @@
 import logging
 import re
-from hashlib import sha256
+from hashlib import sha1
 from .exceptions import TodoParserError
 
 logging.getLogger()
@@ -40,7 +40,7 @@ def _parse_blocks(blocks):
         if _is_heading_block(block):
             block_data.append({
                 "heading": block[1],
-                "id": sha256(block[1].encode()).hexdigest()[:8]
+                "id": sha1(block[1].encode()).hexdigest()
             })
             continue
 
@@ -69,7 +69,7 @@ def _parse_blocks(blocks):
         block_data.append({
             "level": len(curr_indent) // 4,
             "updates": block_lines,
-            "id": sha256(block_lines[0].encode()).hexdigest()[:7],
+            "id": sha1(block_lines[0].encode()).hexdigest(),
             "finished": _is_finished(block_lines)
         })
 
