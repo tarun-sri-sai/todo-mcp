@@ -1,12 +1,9 @@
 import logging
 import re
 from hashlib import sha256
+from lib.todo.exceptions import TodoParserError
 
 logging.getLogger()
-
-
-class TodoParserError(Exception):
-    pass
 
 
 def _normalize_newlines(text):

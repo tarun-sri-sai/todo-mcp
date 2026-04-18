@@ -6,10 +6,6 @@ from sortedcontainers import SortedDict
 logging.getLogger()
 
 
-class TodoAnalyzerError(Exception):
-    pass
-
-
 class TodoAnalyzer:
     def __init__(self, repo_path):
         self._DATE_FMT = "%Y-%m-%d"
