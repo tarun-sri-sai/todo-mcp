@@ -116,6 +116,42 @@ def _validate_block_data(block_data):
     _validate_parents(block_data)
 
 
+def _build_task_map(block_data):
+    dummy_task = {"level": -1, "id": ""}
+
+    task_map = {}
+    curr_heading = None
+    curr_parents = [dummy_task]
+
+    for block in block_data:
+        if "heading" in block:
+            curr_heading = block["heading"]
+            curr_parents = [dummy_task]
+            continue
+
+        current_task = {
+            "updates": block["updates"],
+            "finished": block["finished"],
+        }
+
+        if curr_heading is not None:
+            current_task["heading"] = curr_heading
+
+        while curr_parents and curr_parents[-1]["level"] >= block["level"]:
+            curr_parents.pop()
+
+        task_sha = sha1()
+        for parent in curr_parents[1:]:
+            task_sha.update(parent["id"].encode())
+        task_sha.update(block["id"].encode())
+
+        current_task["id"] = task_sha.hexdigest()
+        task_map[current_task["id"]] = current_task
+        curr_parents.append(block)
+
+    return task_map
+
+
 def parse_todo(text):
     try:
         text = _normalize_newlines(text)
@@ -124,7 +160,7 @@ def parse_todo(text):
         block_data = _parse_blocks(blocks)
         _validate_block_data(block_data)
 
-        return block_data
+        return _build_task_map(block_data)
     except TodoParserError:
         raise
     except Exception as e:
