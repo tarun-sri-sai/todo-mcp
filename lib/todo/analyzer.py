@@ -119,7 +119,7 @@ class TodoAnalyzer:
                 )
 
         return tasks
-    
+
     def _get_tasks_by_min_days(self, tasks, min_days=0):
         return {
             task_id: task
