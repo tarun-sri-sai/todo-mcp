@@ -106,7 +106,7 @@ class TodoAnalyzer:
                         tasks[task_id]["end_date"] = commit_obj.message.strip()
 
                 for task_id, task in tasks.items():
-                    if task_id not in curr_tasks:
+                    if task_id not in curr_tasks and not task["finished"]:
                         task["abandoned"] = True
                         task["end_date"] = commit_obj.message.strip()
             except TodoParserError:
