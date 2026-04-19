@@ -146,6 +146,9 @@ def _build_task_map(block_data):
         task_sha.update(block["id"].encode())
 
         current_task["id"] = task_sha.hexdigest()
+        current_task["parents"] = [
+            parent["updates"][0] for parent in curr_parents[1:]
+        ]
         task_map[current_task["id"]] = current_task
         curr_parents.append(block)
 
