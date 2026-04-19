@@ -99,6 +99,9 @@ class TodoAnalyzer:
                         }
                         continue
 
+                    if task_id not in tasks:
+                        continue
+
                     tasks[task_id]["updates"] = task["updates"]
 
                     if task["finished"] and not tasks[task_id]["finished"]:
