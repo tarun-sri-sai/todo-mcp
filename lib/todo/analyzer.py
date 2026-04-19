@@ -94,7 +94,7 @@ class TodoAnalyzer:
                 for task_id, task in task_map.items():
                     if task_id not in tasks:
                         tasks[task_id] = {
-                            **task, 
+                            **task,
                             "start_date": commit_obj.message.strip()
                         }
                         continue
@@ -119,3 +119,31 @@ class TodoAnalyzer:
                 )
 
         return tasks
+    
+    def _get_tasks_by_min_days(self, tasks, min_days=0):
+        return {
+            task_id: task
+            for task_id, task in tasks.items()
+            if (
+                self._try_parse_date(task["end_date"])
+                - self._try_parse_date(task["start_date"])
+            ).days >= min_days
+        }
+
+    def get_abandoned_tasks(self, from_date_str=None, to_date_str=None, min_days=0):
+        tasks = self.get_tasks(from_date_str, to_date_str)
+        abandoned_tasks = {
+            task_id: task
+            for task_id, task in tasks.items()
+            if task.get("abandoned", False)
+        }
+        return self._get_tasks_by_min_days(abandoned_tasks, min_days)
+
+    def get_finished_tasks(self, from_date_str=None, to_date_str=None, min_days=0):
+        tasks = self.get_tasks(from_date_str, to_date_str)
+        finished_tasks = {
+            task_id: task
+            for task_id, task in tasks.items()
+            if task.get("finished", False)
+        }
+        return self._get_tasks_by_min_days(finished_tasks, min_days)
