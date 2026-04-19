@@ -20,7 +20,7 @@ class TodoAnalyzer:
 
     def _try_parse_date(self, date_str):
         try:
-            return datetime.strptime(date_str, format=self._DATE_FMT)
+            return datetime.strptime(date_str, self._DATE_FMT)
         except ValueError:
             raise TodoAnalyzerError(
                 f"invalid date format: {date_str}, expected {self._DATE_FMT}"
