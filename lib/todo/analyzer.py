@@ -38,15 +38,17 @@ class TodoAnalyzer:
                     f"commit {sha} - invalid date format: {message}"
                 )
 
-    def _get_commit_range(self, from_date_str=None, to_date_str=None):
-        if from_date_str is None:
-            from_date = self._history.peekitem(0)[0]
-
-        if to_date_str is None:
-            from_date = self._history.peekitem(-1)[0]
-
-        from_date = from_date or self._try_parse_date(from_date_str)
-        to_date = to_date or self._try_parse_date(to_date_str)
+    def _get_date_range(self, from_date_str=None, to_date_str=None):
+        from_date = (
+            self._history.peekitem(0)[0]
+            if from_date_str is None
+            else self._try_parse_date(from_date_str)
+        )
+        to_date = (
+            self._history.peekitem(-1)[0]
+            if to_date_str is None
+            else self._try_parse_date(to_date_str)
+        )
 
         if from_date > to_date:
             raise TodoAnalyzerError(
@@ -58,29 +60,29 @@ class TodoAnalyzer:
             raise TodoAnalyzerError(
                 f"no todos found for 'start date' {from_date_str}"
             )
-        history_start_commit = self._history.items()[ceiling][1]
+        history_start_date = self._history.items()[ceiling][0]
 
         floor = self._history.bisect_right(to_date) - 1
         if floor == -1:
             raise TodoAnalyzerError(
                 f"no todos found for 'end date' {to_date_str}"
             )
-        history_end_commit = self._history.items()[floor][1]
+        history_end_date = self._history.items()[floor][0]
 
-        return history_start_commit, history_end_commit
+        return history_start_date, history_end_date
 
     def get_tasks(self, from_date_str=None, to_date_str=None):
-        history_start_commit, history_end_commit = self._get_commit_range(
+        history_start_date, history_end_date = self._get_date_range(
             from_date_str,
             to_date_str
         )
-        commits = self._history.irange(
-            history_start_commit,
-            history_end_commit
+        history_dates = self._history.irange(
+            history_start_date,
+            history_end_date
         )
 
         tasks = {}
-        for commit in commits:
+        for commit in (self._history[date] for date in history_dates):
             commit_obj = self._todo_repo.commit(commit)
             try:
                 todo_file = commit_obj.tree / self._TODO_FILE
