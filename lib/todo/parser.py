@@ -150,7 +150,7 @@ def _build_task_map(block_data):
             parent["updates"][0] for parent in curr_parents[1:]
         ]
         current_task["finished"] |= (
-            any(parent["finished"] for parent in curr_parents)
+            any(parent.get("finished", False) for parent in curr_parents)
         )
 
         task_map[current_task["id"]] = current_task
