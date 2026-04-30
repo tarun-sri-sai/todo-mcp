@@ -92,19 +92,15 @@ class TodoAnalyzer:
                 curr_tasks = set(task_map.keys())
 
                 for task_id, task in task_map.items():
-                    if task_id not in tasks and not task["finished"]:
+                    if task_id not in tasks:
                         tasks[task_id] = {
                             **task,
                             "start_date": commit_obj.message.strip()
                         }
-                        continue
-
-                    if task_id not in tasks:
-                        continue
 
                     tasks[task_id]["updates"] = task["updates"]
 
-                    if task["finished"] and not tasks[task_id]["finished"]:
+                    if task["finished"] and "end_date" not in tasks[task_id]:
                         tasks[task_id]["finished"] = True
                         tasks[task_id]["end_date"] = commit_obj.message.strip()
 
