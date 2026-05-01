@@ -1,5 +1,6 @@
 import git
 import logging
+import traceback
 from datetime import datetime
 from sortedcontainers import SortedDict
 from .parser import parse_todo
@@ -119,11 +120,12 @@ class TodoAnalyzer:
                 logging.warning(
                     f"commit {commit} - failed to parse {self._TODO_FILE}"
                 )
+                logging.debug(traceback.format_exc())
             except Exception as e:
                 logging.warning(
                     f"commit {commit} - error parsing {self._TODO_FILE}: {e}"
                 )
-
+                logging.debug(traceback.format_exc())
         return tasks
 
     def _get_tasks_by_min_days(self, tasks, min_days=0):
