@@ -15,7 +15,7 @@ def _split_blocks(text):
     return [block.split("\n") for block in text_blocks]
 
 
-def _is_heading_block(block):
+def _is_category_block(block):
     if len(block) != 3 or len(block[0]) != 32 or block[0][0] != "*":
         return False
 
@@ -37,9 +37,9 @@ def _is_finished(block):
 def _parse_blocks(blocks):
     block_data = []
     for block in blocks:
-        if _is_heading_block(block):
+        if _is_category_block(block):
             block_data.append({
-                "heading": block[1],
+                "category": block[1],
                 "id": sha1(block[1].encode()).hexdigest()
             })
             continue
@@ -78,18 +78,18 @@ def _parse_blocks(blocks):
 
 def _validate_parents(block_data):
     curr_indents = [-1]
-    curr_heading = ""
+    curr_category = ""
     first_block = True
     for block in block_data:
-        if "heading" in block:
+        if "category" in block:
             first_block = True
             curr_indents = [-1]
-            curr_heading = block["heading"]
+            curr_category = block["category"]
             continue
 
         if first_block and block["level"] > 0:
             raise TodoParserError(
-                f"invalid first task for {curr_heading}"
+                f"invalid first task for {curr_category}"
             )
 
         while curr_indents and curr_indents[-1] >= block["level"]:
@@ -110,8 +110,8 @@ def _validate_block_data(block_data):
     if len(block_data) == 0:
         raise TodoParserError("empty todo")
 
-    if "heading" not in block_data[0]:
-        logging.warning("first block must be a heading")
+    if "category" not in block_data[0]:
+        logging.warning("first block must be a category")
 
     _validate_parents(block_data)
 
@@ -120,12 +120,12 @@ def _build_task_map(block_data):
     dummy_task = {"level": -1, "id": ""}
 
     task_map = {}
-    curr_heading = None
+    curr_category = None
     curr_parents = [dummy_task]
 
     for block in block_data:
-        if "heading" in block:
-            curr_heading = block["heading"]
+        if "category" in block:
+            curr_category = block["category"]
             curr_parents = [dummy_task]
             continue
 
@@ -134,8 +134,8 @@ def _build_task_map(block_data):
             "finished": block["finished"],
         }
 
-        if curr_heading is not None:
-            current_task["heading"] = curr_heading
+        if curr_category is not None:
+            current_task["category"] = curr_category
 
         while curr_parents and curr_parents[-1]["level"] >= block["level"]:
             curr_parents.pop()
