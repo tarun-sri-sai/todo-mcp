@@ -68,7 +68,8 @@ def _parse_blocks(blocks):
 
         block_data.append({
             "level": len(curr_indent) // 4,
-            "updates": block_lines,
+            "title": block_lines[0],
+            "updates": block_lines[1:],
             "id": sha1(block_lines[0].encode()).hexdigest(),
             "finished": _is_finished(block_lines)
         })
@@ -99,7 +100,7 @@ def _validate_parents(block_data):
             block["level"] - 1 != curr_indents[-1]
         ):
             raise TodoParserError(
-                f"invalid parent task for \"{block['updates'][0]}\""
+                f"invalid parent task for \"{block['title']}\""
             )
 
         curr_indents.append(block["level"])
@@ -130,6 +131,7 @@ def _build_task_map(block_data):
             continue
 
         current_task = {
+            "title": block["title"],
             "updates": block["updates"],
             "finished": block["finished"],
         }
@@ -147,7 +149,7 @@ def _build_task_map(block_data):
 
         current_task["id"] = task_sha.hexdigest()
         current_task["parents"] = [
-            parent["updates"][0] for parent in curr_parents[1:]
+            parent["title"] for parent in curr_parents[1:]
         ]
         current_task["finished"] |= (
             any(parent.get("finished", False) for parent in curr_parents)
