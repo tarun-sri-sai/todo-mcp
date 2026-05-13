@@ -18,7 +18,7 @@ def init_logger():
     logging.getLogger().setLevel(logging.DEBUG)
 
 
-def run_test(repo_path, args):
+def analyze(repo_path, args):
     analyzer = TodoAnalyzer(repo_path)
 
     if args.command == "get-tasks":
@@ -138,7 +138,7 @@ def main():
         logging.critical(f"repository path does not exist: {repo_path}")
         return 1
 
-    return run_test(repo_path, args)
+    return analyze(repo_path, args)
 
 
 if __name__ == "__main__":

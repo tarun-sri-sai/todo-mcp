@@ -1,14 +1,10 @@
-# Todo MCP
+# To-do Tools
 
-An MCP server to analyze to-dos.
+This repository contains a set of tools to check to-do syntax, analyze to-do history and provides an MCP server for LLM-friendly insights.
 
-## Setup
+## To-do Syntax
 
-This MCP operates on a data source that is able to provide it daily snapshots of a file or a similar container containing the to-do contents.
-
-## Syntax
-
-The to-do contents must follow this specification:
+The to-do contents must follow the syntax rules mentioned below. You can check if your to-do follows the rules by running `check. py`.
 
 1. **General Structure:**
    - The file is divided into _blocks_, separated by <ins>blank lines</ins>.
@@ -81,3 +77,15 @@ The to-do contents must follow this specification:
 
    Get a new SIM                                                                (This is a new root task, because it's not indented)
    ```
+
+## Analyzer
+
+Analyzer offers a CLI tool to get insights on your to-do history.
+
+To run the analyzer, run `analyze.py`.
+
+The analyzer operates on a data source that is able to provide it daily snapshots of a file or a similar container containing the to-do contents of that day.
+
+## MCP Server
+
+Running `mcp.py` runs an stdio MCP server to analyze to-do history. It offers an LLM-friendly interface to the analyzer.
