@@ -4,7 +4,7 @@ This repository contains a set of tools to check to-do syntax, analyze to-do his
 
 ## To-do Syntax
 
-The to-do contents must follow the syntax rules mentioned below. You can check if your to-do follows the rules by running `check. py`.
+The to-do contents must follow the syntax rules mentioned below. You can check if your to-do follows the rules by running `check.py`.
 
 1. **General Structure:**
    - The file is divided into _blocks_, separated by <ins>blank lines</ins>.
