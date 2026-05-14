@@ -157,8 +157,6 @@ def cmd_analyze(args):
 
 def cmd_mcp(args):
     """Handle the 'mcp' subcommand."""
-    logging.getLogger().setLevel(logging.DEBUG)
-    
     repo_path = Path(args.repo_path)
     if not repo_path.exists():
         logging.critical(f"repository path does not exist: {repo_path}")
