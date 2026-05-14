@@ -2,7 +2,7 @@
 
 This repository contains a set of tools to check to-do syntax, analyze to-do history and provides an MCP server for LLM-friendly insights.
 
-## To-do Syntax
+## Syntax
 
 The to-do contents must follow the syntax rules mentioned below. You can check if your to-do follows the rules by running `check.py`.
 
