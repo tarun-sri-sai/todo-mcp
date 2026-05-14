@@ -99,8 +99,6 @@ def update_analyze_subparsers(subparsers):
 
 def cmd_analyze(args):
     """Handle the 'analyze' subcommand."""
-    logging.getLogger().setLevel(logging.DEBUG)
-    
     repo_path = Path(args.repo_path)
     if not repo_path.exists():
         logging.critical(f"repository path does not exist: {repo_path}")
