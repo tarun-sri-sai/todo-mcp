@@ -100,6 +100,8 @@ class TodoAnalyzer:
                         }
 
                     tasks[task_id]["updates"] = task["updates"]
+                    tasks[task_id]["category"] = task["category"]
+                    tasks[task_id]["parentTasks"] = task["parentTasks"]
 
                     if (
                         task.get("finished", False)
