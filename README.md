@@ -4,7 +4,7 @@ This repository contains a set of tools to check to-do syntax, analyze to-do his
 
 ## Syntax
 
-The to-do contents must follow the syntax rules mentioned below. You can check if your to-do follows the rules by running `check.py`.
+The to-do contents must follow the syntax rules mentioned below. You can check if your to-do follows the rules by running the `check` subcommand.
 
 1. **General Structure:**
    - The file is divided into _blocks_, separated by <ins>blank lines</ins>.
@@ -82,10 +82,10 @@ The to-do contents must follow the syntax rules mentioned below. You can check i
 
 Analyzer offers a CLI tool to get insights on your to-do history.
 
-To run the analyzer, run `analyze.py`.
+To run the analyzer, run the `analyze` subcommand.
 
 The analyzer operates on a data source that is able to provide it daily snapshots of a file or a similar container containing the to-do contents of that day.
 
 ## MCP Server
 
-Running `mcp.py` runs an stdio MCP server to analyze to-do history. It offers an LLM-friendly interface to the analyzer.
+Running the `mcp` subcommand runs an stdio MCP server to analyze to-do history. It offers an LLM-friendly interface to the analyzer.
